@@ -79,12 +79,14 @@ for n in np.arange(0,20+deltat,deltat):
             u.append(gaussian(i,x0)) #calcolo gaussiana u
             u0.append(gaussian0(i,x0)) #calcolo gaussiana prec u0
         plt.plot(x_val,u)
+        plt.savefig("leap/leapfrog" + i + ".png")
     un = leapfrog(u[:],u0[:])
     plt.plot(x_val,un)
+    u0=u
     u=un
     n+=1
-plt.savefig("leapfrog.png")
-plt.show(1)
+plt.savefig("leap/leapfrog" + i + ".png")
+#plt.show(1)
 '''
 plt.figure(2)
 plt.plot(norme)
