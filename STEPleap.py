@@ -13,10 +13,14 @@ deltax= L/(J-1)
 deltat= (deltax * cf)/a
 
 #FUNZIONI-----------------------------------------
-def gaussian(a, b):
-    return np.exp(-np.power(a-b,2))
-def gaussian0(a, b):
-    return np.exp(-np.power(a-(b-1),2))
+def step(*j):
+    s=[]
+    for x in j:
+        if x <= 6. and x >= 4:
+            s.append(1)
+        else: 
+            s.append(0)
+    return s
 
 def leapfrog(v,w):
     y = []
@@ -43,14 +47,13 @@ def norma(*y):
 #calcolo vettore x
 x_val= np.arange(0,L,deltax) 
 
-
+'''
 #normal chart
 plt.figure(1)
 for n in np.arange(0,20+deltat,deltat):
     if n == 0:
-        for i in x_val:
-            u.append(gaussian(i,x0)) #calcolo gaussiana u
-            u0.append(gaussian0(i,x0)) #calcolo gaussiana prec u0
+        u = step(*x_val)
+        u0 = step(*(x_val-1))
         plt.plot(x_val,u)
         norme.append(norma(*u))
     un = leapfrog(u[:],u0[:])
@@ -59,7 +62,7 @@ for n in np.arange(0,20+deltat,deltat):
     u0=u
     u=un
     n+=1
-plt.savefig("leap/leapfrogTOTAL.png")
+plt.savefig("leap/STEP/leapfrogTOTAL.png")
 #plt.show(1)
 #end total chart
 
@@ -68,24 +71,24 @@ plt.savefig("leap/leapfrogTOTAL.png")
 for m,n in enumerate(np.arange(0,20+deltat,deltat)):
     plt.clf()
     if n == 0:
-        for i in x_val:
-            u.append(gaussian(i,x0)) #calcolo gaussiana u
-            u0.append(gaussian0(i,x0)) #calcolo gaussiana prec u0
+        u = step(*x_val)
+        u0 = step(*(x_val-1))
         plt.plot(x_val,u)
         norme.append(norma(*u))
-        plt.savefig("leap/leapfrog" + str(m) + ".png")
+        plt.savefig("leap/STEP/leapfrog" + str(m) + ".png")
     un = leapfrog(u[:],u0[:])
     plt.plot(x_val,un)
     norme.append(norma(*u))
     u0=u
     u=un
     n+=1
-    plt.savefig("leap/leapfrog" + str(m) + ".png")
+    plt.savefig("leap/STEP/leapfrog" + str(m) + ".png")
     plt.clf()
     plt.plot(norme)
-    plt.savefig("norme/norm" + str(m) + ".png")
+    plt.savefig("norme/STEP/norm" + str(m) + ".png")
 #plt.show(1)
 #end chart for gif
+
 '''
 plt.figure(2)
 plt.plot(norme)
