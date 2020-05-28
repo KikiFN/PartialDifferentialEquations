@@ -59,34 +59,41 @@ def norma(*y):
 
 #calcolo vettore x
 x_val= np.arange(0,L,deltax) 
+#normal chart
+'''
 plt.figure(1)
-'''
-for n in np.arange(0,20+deltat,deltat):
-    if n == 0:
-        for i in x_val:
-            u.append(gaussian(i,x0)) #calcolo vettore u
-        plt.plot(x_val,u)
-        norme.append(norma(*u))
-    un = laxfried(*u)
-    norme.append(norma(*un))
-    plt.plot(x_val,un)
-    u = un
-    n+=1
-'''
 for n in np.arange(0,20+deltat,deltat):
     if n == 0:
         for i in x_val:
             u.append(gaussian(i,x0)) #calcolo gaussiana u
             u0.append(gaussian0(i,x0)) #calcolo gaussiana prec u0
         plt.plot(x_val,u)
-        plt.savefig("leap/leapfrog" + i + ".png")
     un = leapfrog(u[:],u0[:])
     plt.plot(x_val,un)
     u0=u
     u=un
     n+=1
-plt.savefig("leap/leapfrog" + i + ".png")
+plt.savefig("leap/leapfrogTOTAL.png")
 #plt.show(1)
+'''
+#chart for gif
+for m,n in enumerate(np.arange(0,20+deltat,deltat)):
+    plt.clf()
+    if n == 0:
+        for i in x_val:
+            u.append(gaussian(i,x0)) #calcolo gaussiana u
+            u0.append(gaussian0(i,x0)) #calcolo gaussiana prec u0
+        plt.plot(x_val,u)
+        plt.savefig("leap/leapfrog" + str(m) + ".png")
+    un = leapfrog(u[:],u0[:])
+    plt.plot(x_val,un)
+    u0=u
+    u=un
+    n+=1
+    plt.savefig("leap/leapfrog" + str(m) + ".png")
+#plt.show(1)
+
+
 '''
 plt.figure(2)
 plt.plot(norme)
