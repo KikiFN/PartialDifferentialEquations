@@ -7,12 +7,15 @@ x0=5
 L=10
 J=101
 cf= 0.5
-u, x= [],[]
+u = []
 un,un2,norme = [],[],[]
 deltax= L/(J-1)
 deltat= (deltax * cf)/a
 
 #FUNZIONI-----------------------------------------
+def gaussian(a, b):
+    return np.exp(-np.power(a-b,2))
+
 def step(*j):
     s=[]
     for x in j:
@@ -22,7 +25,7 @@ def step(*j):
             s.append(0)
     return s
 
-def laxfried(*x):
+def ftcs(*x):
     y = []
     for j in range(0,len(x)):
         if j==0:
@@ -36,7 +39,7 @@ def laxfried(*x):
                 umin=j-1
                 umax=j+1
 
-        val= 0.5*( (x[umin]) + (x[umax]) ) - ( (a*deltat)/(2*deltax) )*( (x[umax]) - (x[umin]) )
+        val= x[j] - ( (a*deltat)/(2*deltax) )*( (x[umax]) - (x[umin]) )
         y.append(val)
     return y
 
@@ -51,19 +54,21 @@ def norma(*y):
 
 #calcolo vettore x
 x_val= np.arange(0,L,deltax) 
+
 plt.figure(1)
 #primo u
 u = step(*x_val)
 plt.plot(x_val,u)
 norme.append(norma(*u))
+
 #secondo u
-un = laxfried(*u)
+un = ftcs(*u)
 plt.plot(x_val,un)
 norme.append(norma(*un))
 
 #tutti gli altri u
-for n in np.arange(0,5,deltat):
-    un2 = laxfried(*un)
+for n in np.arange(0,20+deltat,deltat):
+    un2 = ftcs(*un)
     norme.append(norma(*un2))
     #print(un2)
     plt.plot(x_val,un2)
@@ -71,12 +76,12 @@ for n in np.arange(0,5,deltat):
     n+=1
 
 
-plt.savefig("STEPlax-friedrichs.png")
+plt.savefig("STEPftcs.png")
 plt.show(1)
 
 print(len(norme))
 
 plt.figure(2)
 plt.plot(norme)
-plt.savefig("STEPnormelaxfried.png")
+plt.savefig("STEPnormeftcs.png")
 plt.show(2)
