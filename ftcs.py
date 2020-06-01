@@ -51,11 +51,11 @@ plt.figure(1)
 for i in x_val:
     u.append(gaussian(i,x0)) #calcolo vettore u
 #plt.plot(x_val,u)
-norme.append(norma(*u))
+#norme.append(norma(*u))
 #secondo u
 un = ftcs(*u)
 #plt.plot(x_val,un)
-norme.append(norma(*un))
+#norme.append(norma(*un))
 
 permitted_times = [0,5,10,15,20]
 
@@ -75,6 +75,6 @@ plt.show(1)
 print(len(norme))
 
 plt.figure(2)
-plt.plot(norme)
+plt.plot(np.arange(0,20+deltat,deltat),norme)
 plt.savefig("normeftcs.png")
 plt.show(2)
