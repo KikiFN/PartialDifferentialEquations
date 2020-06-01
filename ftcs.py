@@ -50,19 +50,21 @@ plt.figure(1)
 #primo u
 for i in x_val:
     u.append(gaussian(i,x0)) #calcolo vettore u
-plt.plot(x_val,u)
+#plt.plot(x_val,u)
 norme.append(norma(*u))
 #secondo u
 un = ftcs(*u)
-plt.plot(x_val,un)
+#plt.plot(x_val,un)
 norme.append(norma(*un))
 
+permitted_times = [0,5,10,15,20]
+
 #tutti gli altri u
-for n in np.arange(0,20+deltat,deltat):
+for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     un2 = ftcs(*un)
     norme.append(norma(*un2))
     #print(un2)
-    plt.plot(x_val,un2)
+    if i in permitted_times: plt.plot(x_val,un2)
     un = un2
     n+=1
 
