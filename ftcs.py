@@ -1,12 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from numpy import linalg as LA
 
-#VALORI DI INPUZZ ---------------------------------
+#VALORI DI INPUT ---------------------------------
 a=1
 x0=5
 L=10
 J=101
-cf= 0.5
+cf=0.5
 u = []
 un,un2,norme = [],[],[]
 deltax= L/(J-1)
@@ -34,47 +35,55 @@ def ftcs(*x):
         y.append(val)
     return y
 
-def norma(*y):
+#def norma(*y):
     somma=0
     for j in range(0,len(y)):
         mod=0
         mod = np.power(y[j],2)
         somma+=mod
     return np.sqrt(somma/J)
+
+def norma(*y):
+    return LA.norm(y)/np.sqrt(J)
 #--------------------------------------------------
 
-#calcolo vettore x
-x_val= np.arange(0,L,deltax) 
+x_val= np.arange(0,L,deltax) #calcolo vettore x
 
-plt.figure(1)
-#primo u
+fig1=plt.figure(1)
 for i in x_val:
-    u.append(gaussian(i,x0)) #calcolo vettore u
-#plt.plot(x_val,u)
+    u.append(gaussian(i,x0))  #calcolo vettore u
+plt.plot(x_val,u, label='u(x,0)')
 #norme.append(norma(*u))
-#secondo u
-un = ftcs(*u)
+
+un = ftcs(*u)                 #secondo u
 #plt.plot(x_val,un)
 #norme.append(norma(*un))
 
-permitted_times = [0,5,10,15,20]
-
+permitted_times = [100,200,300,400]
+name=[5,10,15,20]
 #tutti gli altri u
 for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     un2 = ftcs(*un)
     norme.append(norma(*un2))
-    #print(un2)
-    if i in permitted_times: plt.plot(x_val,un2)
+    if i in permitted_times: 
+        plt.plot(x_val,un2,label='u(x,'+ str(name[0]) +')')    
+        plt.legend(loc=0)
+        name[0]=name[1]
+        name[1]=name[2]
+        name[2]=name[3]
     un = un2
     n+=1
+plt.xlabel('x')
+plt.ylabel('u')
 
+plt.title('Metodo FTCS')
+fig1.set_size_inches(10,7)
+plt.savefig("1_ftcs.png", dpi=100)
 
-plt.savefig("ftcs.png")
-plt.show(1)
-
-print(len(norme))
-
-plt.figure(2)
+fig2=plt.figure(2)
 plt.plot(np.arange(0,20+deltat,deltat),norme)
-plt.savefig("normeftcs.png")
-plt.show(2)
+plt.title('Norma L2 con metodo FTCS')
+plt.xlabel('t')
+plt.ylabel('L2-norm')
+fig2.set_size_inches(10,7)
+plt.savefig("1_normeftcs.png", dpi=100)
