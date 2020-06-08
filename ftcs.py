@@ -53,20 +53,15 @@ fig1=plt.figure(1)
 for i in x_val:
     u.append(gaussian(i,x0))  #calcolo vettore u
 plt.plot(x_val,u, label='u(x,0)')
-#norme.append(norma(*u))
 
 un = ftcs(*u)                 #secondo u
-#plt.plot(x_val,un)
-#norme.append(norma(*un))
-
-#permitted_times = [100,200,300,400]
-#name=[5,10,15,20]
 permitted_times = {
     100:5,
     200:10,
     300:15,
     400:20
 }
+
 #tutti gli altri u
 for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     un2 = ftcs(*un)
@@ -75,7 +70,6 @@ for i,n in enumerate(np.arange(0,20+deltat,deltat)):
         plt.plot(x_val,un2,label='u(x,'+ str(permitted_times[i]) +')')    
         plt.legend(loc=0)
     un = un2
-    n+=1
 plt.xlabel('x')
 plt.ylabel('u')
 
