@@ -20,25 +20,33 @@ cost=((v**2)*(deltat**2))/(deltax**2)
 #FUNZIONI-----------------------------------------
 def gaussian(a, b, c, d):
     return np.exp(-np.power(a-b,2) - np.power(c-d,2))
-def gaussian0(a, b):
+def gaussian0(a,b,c,d):
     return np.exp(-np.power(a-(b-1),2) - np.power(c - (d-1),2))
 
-def leapfrog(v,w):  #AGGIUNGERE INDICE i
+def leapfrog(v,w,z):  #AGGIUNGERE INDICE i
     y = []
-    for j in range(0,len(v)):
+    for j,i in (range(0,len(v)),range(0,len(z))):
         if j==0:
-            meno1=-1 #indice per ultimo valore del vett
-            piu1=j+1 
+            jmeno1=-1 #indice per ultimo valore del vett
+            jpiu1=j+1 
         else:  
             if j==J-2:
-                meno1=j-1
-                piu1=0 #indice primo valore del vett
+                jmeno1=j-1
+                jpiu1=0 #indice primo valore del vett
             else:
-                meno1=j-1
-                piu1=j+1
-
-        val= (cost* v[piu1]) + 2*v[j]*(1-cost) + (cost*v[meno1]) - w[j]
-        val= 
+                jmeno1=j-1
+                jpiu1=j+1
+        if i==0:
+            imeno1=-1 #indice per ultimo valore del vett
+            ipiu1=i+1 
+        else:  
+            if i==I-2:
+                imeno1=i-1
+                ipiu1=0 #indice primo valore del vett
+            else:
+                meno1=i-1
+                piu1=i+1
+        val= 2*v[]
         y.append(val)
     return y
     
