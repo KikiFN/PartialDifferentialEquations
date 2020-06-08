@@ -59,18 +59,21 @@ un = ftcs(*u)                 #secondo u
 #plt.plot(x_val,un)
 #norme.append(norma(*un))
 
-permitted_times = [100,200,300,400]
-name=[5,10,15,20]
+#permitted_times = [100,200,300,400]
+#name=[5,10,15,20]
+permitted_times = {
+    100:5,
+    200:10,
+    300:15,
+    400:20
+}
 #tutti gli altri u
 for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     un2 = ftcs(*un)
     norme.append(norma(*un2))
-    if i in permitted_times: 
-        plt.plot(x_val,un2,label='u(x,'+ str(name[0]) +')')    
+    if i in permitted_times.keys(): 
+        plt.plot(x_val,un2,label='u(x,'+ str(permitted_times[i]) +')')    
         plt.legend(loc=0)
-        name[0]=name[1]
-        name[1]=name[2]
-        name[2]=name[3]
     un = un2
     n+=1
 plt.xlabel('x')
@@ -78,7 +81,7 @@ plt.ylabel('u')
 
 plt.title('Metodo FTCS')
 fig1.set_size_inches(10,7)
-plt.savefig("1_ftcs.png", dpi=100)
+plt.savefig("1new_ftcs.png", dpi=100)
 
 fig2=plt.figure(2)
 plt.plot(np.arange(0,20+deltat,deltat),norme)
