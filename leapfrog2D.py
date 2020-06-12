@@ -71,10 +71,10 @@ for n in np.arange(0,20+deltat,deltat):
     u0=u
     u=un
     n+=1
-plt.savefig("leapfrog1D.png")
+plt.savefig("leapfrog2D.png")
 #plt.show(1)
 
 plt.figure(2)
 plt.plot(norme)
-plt.savefig("leapfrog1D-norme.png")
+plt.savefig("leapfrog2D-norme.png")
 #plt.show(2)
