@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy import linalg as LA
 
-#VALORI DI INPUZZ ---------------------------------
+#VALORI DI INPUT ---------------------------------
 a=1
 v=1
 x0=5
@@ -18,7 +18,7 @@ cost=((v**2)*(deltat**2))/(deltax**2)
 def gaussian(a, b):
     return np.exp(-np.power(a-b,2))
 def gaussian0(a, b):
-    return np.exp(-np.power(a-(b-1),2))
+    return np.exp(-np.power(a-(b-deltat),2))
 
 def leapfrog(v,w):
     y = []
@@ -41,28 +41,40 @@ def leapfrog(v,w):
 def norma(*y):
     return LA.norm(y)/np.sqrt(J)
 #--------------------------------------------------
+x_val= np.arange(0,L,deltax)                  #calcolo vettore x
 
-#calcolo vettore x
-x_val= np.arange(0,L,deltax) 
-plt.figure(1)
-
-for n in np.arange(0,20+deltat,deltat):
+fig1=plt.figure(1)
+permitted_times = {
+    60:3,
+    100:5,
+    160:8,
+    200:10,
+    300:15,
+    400:20
+}
+for k,n in enumerate(np.arange(0,20+deltat,deltat)):
     if n == 0:
         for i in x_val:
-            u.append(gaussian(i,x0)) #calcolo gaussiana u
-            u0.append(gaussian0(i,x0)) #calcolo gaussiana prec u0
-        plt.plot(x_val,u)
-        norme.append(norma(*u))
+            u.append(gaussian(i,x0))           #calcolo gaussiana u
+            u0.append(gaussian0(i,x0))         #calcolo gaussiana prec u0
+        plt.plot(x_val,u, label='u(x,0)')
     un = leapfrog(u[:],u0[:])
-    plt.plot(x_val,un)
+    if k in permitted_times.keys(): 
+        plt.plot(x_val,un,label='u(x,'+ str(permitted_times[k]) +')')
     norme.append(norma(*un))
     u0=u
     u=un
-    n+=1
+plt.legend(loc=0)
+plt.xlabel('x')
+plt.ylabel('u')
+plt.title('Metodo Leapfrog')
+fig1.set_size_inches(10,7)
 plt.savefig("leapfrog1D.png")
-#plt.show(1)
 
-plt.figure(2)
-plt.plot(norme)
-plt.savefig("leapfrog1D-norme.png")
-#plt.show(2)
+fig2=plt.figure(2)
+plt.plot(np.arange(0,20+deltat,deltat),norme)
+plt.title('Norma l2 con metodo Leapfrog')
+plt.xlabel('t')
+plt.ylabel('l2-norm')
+fig2.set_size_inches(10,7)
+plt.savefig("leapfrog1D-norme.png", dpi=100)

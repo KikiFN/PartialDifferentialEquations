@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy import linalg as LA
 
-#VALORI DI INPUZZ ---------------------------------
+#VALORI DI INPUT ---------------------------------
 a=1
 x0=5
 L=10
@@ -16,7 +16,7 @@ deltat= (deltax * cf)/a
 def gaussian(a, b):
     return np.exp(-np.power(a-b,2))
 def gaussian0(a, b):
-    return np.exp(-np.power(a-(b-1),2))
+    return np.exp(-np.power(a-(b-deltat),2))
 
 def leapfrog(v,w):
     y = []
@@ -31,65 +31,45 @@ def leapfrog(v,w):
             else:
                 meno1=j-1
                 piu1=j+1
-
-        val= w[j] - ( (a*deltat)/(deltax) )*( (v[piu1]) - (v[meno1]) )
+        val= w[j] - ( (a*deltat)/(2*deltax) )*( (v[piu1]) - (v[meno1]) )
         y.append(val)
     return y
     
 def norma(*y):
     return LA.norm(y)/np.sqrt(J)
 #--------------------------------------------------
+x_val= np.arange(0,L,deltax)            #calcolo vettore x
 
-#calcolo vettore x
-x_val= np.arange(0,L,deltax) 
-
-
-#normal chart
-plt.figure(1)
-for n in np.arange(0,20+deltat,deltat):
+fig1=plt.figure(1)
+permitted_times = {
+    100:5,
+    200:10,
+    300:15,
+    400:20
+}
+for k,n in enumerate(np.arange(0,20+deltat,deltat)):
     if n == 0:
         for i in x_val:
-            u.append(gaussian(i,x0)) #calcolo gaussiana u
-            u0.append(gaussian0(i,x0)) #calcolo gaussiana prec u0
-        plt.plot(x_val,u)
-        norme.append(norma(*u))
+            u.append(gaussian(i,x0))     #calcolo gaussiana u
+            u0.append(gaussian0(i,x0))   #calcolo gaussiana prec u0
+        plt.plot(x_val,u, label='u(x,0)')
     un = leapfrog(u[:],u0[:])
-    plt.plot(x_val,un)
+    if k in permitted_times.keys(): 
+        plt.plot(x_val,un, label='u(x,'+ str(permitted_times[k]) +')')         
     norme.append(norma(*un))
     u0=u
     u=un
-    n+=1
-plt.savefig("leap/leapfrogTOTAL.png")
-#plt.show(1)
-#end total chart
+plt.legend(loc=0)    
+plt.xlabel('x')
+plt.ylabel('u') 
+plt.title('Metodo Leapfrog')
+fig1.set_size_inches(10,7)   
+plt.savefig("3_leapfrog.png",dpi=100)
 
-'''
-#chart for gif
-for m,n in enumerate(np.arange(0,20+deltat,deltat)):
-    plt.clf()
-    if n == 0:
-        for i in x_val:
-            u.append(gaussian(i,x0)) #calcolo gaussiana u
-            u0.append(gaussian0(i,x0)) #calcolo gaussiana prec u0
-        plt.plot(x_val,u)
-        norme.append(norma(*u))
-        plt.savefig("leap/leapfrog" + str(m) + ".png")
-    un = leapfrog(u[:],u0[:])
-    plt.plot(x_val,un)
-    norme.append(norma(*u))
-    u0=u
-    u=un
-    n+=1
-    plt.savefig("leap/leapfrog" + str(m) + ".png")
-    plt.clf()
-    plt.plot(norme)
-    plt.savefig("norme/norm" + str(m) + ".png")
-#plt.show(1)
-#end chart for gif
-'''
-plt.figure(2)
-plt.plot(norme)
-plt.title('Norma')
-plt.savefig("norme.png")
-plt.show(2)
-'''
+fig2= plt.figure(2)
+plt.plot(np.arange(0,20+deltat,deltat),norme)
+plt.title('Norma l2 con metodo Leapfrog')
+plt.xlabel('t')
+plt.ylabel('l2-norm')
+fig2.set_size_inches(10,7)
+plt.savefig("3_norme.png", dpi=100)
