@@ -38,7 +38,7 @@ def leapfrog(v,w):
         y.append(val)
     return y
     
-def norma(*y):
+def norma(y):
     return LA.norm(y)/np.sqrt(J)
 #--------------------------------------------------
 x_val= np.arange(0,L,deltax)                  #calcolo vettore x
@@ -53,7 +53,7 @@ permitted_times = {
     400:20
 }
 for k,n in enumerate(np.arange(0,20+deltat,deltat)):
-    if n == 0:
+    if n == 0 and k ==0:
         for i in x_val:
             u.append(gaussian(i,x0))           #calcolo gaussiana u
             u0.append(gaussian0(i,x0))         #calcolo gaussiana prec u0
@@ -61,7 +61,7 @@ for k,n in enumerate(np.arange(0,20+deltat,deltat)):
     un = leapfrog(u[:],u0[:])
     if k in permitted_times.keys(): 
         plt.plot(x_val,un,label='u(x,'+ str(permitted_times[k]) +')')
-    norme.append(norma(*un))
+    norme.append(norma(un))
     u0=u
     u=un
 plt.legend(loc=0)
