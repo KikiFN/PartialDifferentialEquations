@@ -87,6 +87,6 @@ plt.savefig("1_normeftcs.png", dpi=100)
 
 
 plt.figure(3)
-for t,e in zip(permitted_times.values(),err):
+for t,e in zip((permitted_times.values()),err):
     plt.plot(t,e,marker='.')
 plt.show(3)
