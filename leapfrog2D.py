@@ -55,9 +55,9 @@ for t in range(lenT):
         for y in range(lenY):
             ymin,ymax = whichMinMax(y)
             if t == 0:
-                u_step[x,y] = gaussian0(x,x0,y,y0)
-            if t == 1:
                 u_step[x,y] = gaussian(x,x0,y,y0)
+            if t == 1:
+                u_step[x,y] = 2*u[t-1,x,y] - gaussian(x,x0,y,y0) + cost*(u[t-1,xmax,y] - 2*u[t-1,x,y] + u[t-1,xmin,y]) + cost*(u[t-1,x,ymax] - 2*u[t-1,x,y] + u[t-1,x,ymin])
             else:
                 u_step[x,y] = 2*u[t-1,x,y] - u[t-2,x,y] + cost*(u[t-1,xmax,y] - 2*u[t-1,x,y] + u[t-1,xmin,y]) + cost*(u[t-1,x,ymax] - 2*u[t-1,x,y] + u[t-1,x,ymin])
     norme.append(norma(u_step))
