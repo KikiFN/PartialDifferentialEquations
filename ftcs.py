@@ -45,16 +45,22 @@ def norma(*y):
 x_val= np.arange(0,L,deltax) #calcolo vettore x
 
 fig1=plt.figure(1)
-'''
+
+'''#VERSIONE GIADA
 for i in x_val:
     u.append(gaussian(i,x0))  #calcolo vettore u
 '''
-u = gaussian(x_val,x0)
+
+u = gaussian(x_val,x0) #VERSIONE KIKI 
+
 plt.plot(x_val,u, label='u(x,0)')
 
-un = ftcs(*u)                 #secondo u
+un = ftcs(*u)   
+              #secondo u
 permitted_times = {
+    100:5,
     200:10,
+    300:15,
     400:20
 }
 
@@ -65,7 +71,7 @@ for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     un2 = ftcs(*un)
     norme.append(norma(*un2))
     if i in permitted_times.keys():
-        err.append(norma(un2 - analytical(x_val,x0,i)))
+        if i == 200 or i == 400: err.append(norma(un2 - analytical(x_val,x0,i)))
         plt.plot(x_val,un2,label='u(x,'+ str(permitted_times[i]) +')')
         plt.legend(loc=0)
     un = un2
@@ -75,18 +81,25 @@ plt.ylabel('u')
 plt.title('Metodo FTCS')
 #fig1.set_size_inches(10,7)
 plt.savefig("1new_ftcs.png", dpi=100)
-plt.show(1)
+plt.show(block=True)
+
+
 
 fig2=plt.figure(2)
 plt.plot(np.arange(0,20+deltat,deltat),norme)
 plt.title('Norma L2 con metodo FTCS')
 plt.xlabel('t')
 plt.ylabel('L2-norm')
-fig2.set_size_inches(10,7)
+#fig2.set_size_inches(10,7)
 plt.savefig("1_normeftcs.png", dpi=100)
-
+plt.show(block=True)
 
 plt.figure(3)
-for t,e in zip((permitted_times.values()),err):
-    plt.plot(t,e,marker='.')
-plt.show(3)
+
+permitted_times = {
+    200:10,
+    400:20
+}
+
+plt.plot(list(permitted_times.values()),err,marker='.')
+plt.show(block=True)
