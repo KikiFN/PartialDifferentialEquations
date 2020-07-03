@@ -64,7 +64,7 @@ for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     norme.append(norma(*un2))
     analytical_solution = analytical(x_val,x0,0)
     if i in permitted_times.keys(): 
-        if i == 200 or i == 400: err.append(norma(un2 - analytical_solution))
+        if i == 200 or i == 400: err.append(norma(un2 - gaussian(x_val,x0)))
         plt.plot(x_val,un2,label='u(x,'+ str(permitted_times[i]) +')')
     un = un2
 plt.legend(loc=0)  
@@ -92,4 +92,7 @@ permitted_times = {
 print(err)
 
 plt.plot(list(permitted_times.values()),err,marker='.')
+plt.title('Norma l2 per errore della soluzione con metodo Lax-Friedrichs')
+plt.xlabel('t')
+plt.ylabel('l2-norm err')
 plt.show(block=True)

@@ -31,7 +31,7 @@ def leapfrog(v,w):
             else:
                 meno1=j-1
                 piu1=j+1
-        val= w[j] - ( (a*deltat)/(2*deltax) )*( (v[piu1]) - (v[meno1]) )
+        val= w[j] - ( (a*deltat)/(deltax) )*( (v[piu1]) - (v[meno1]) )
         y.append(val)
     return y
     
@@ -55,6 +55,7 @@ for k,n in enumerate(np.arange(0,20+deltat,deltat)):
         plt.plot(x_val,u, label='u(x,0)')
     un = leapfrog(u[:],u0[:])
     if k in permitted_times.keys(): 
+        if k == 200 or k == 400: err.append(norma(un - gaussian(x_val,x0)))
         plt.plot(x_val,un, label='u(x,'+ str(permitted_times[k]) +')')         
     norme.append(norma(*un))
     u0=u
@@ -73,3 +74,15 @@ plt.xlabel('t')
 plt.ylabel('l2-norm')
 fig2.set_size_inches(10,7)
 plt.savefig("3_norme.png", dpi=100)
+
+fig3=plt.figure(3)
+permitted_times = {
+    200:10,
+    400:20
+}
+plt.plot(list(permitted_times.values()),err,'o-')
+plt.title('Norma l2 per errore della soluzione con metodo Leapfrog')
+plt.xlabel('t')
+plt.ylabel('l2-norm err')
+fig3.set_size_inches(12,7)
+plt.savefig('3_err.png', dpi=100)

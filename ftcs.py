@@ -71,7 +71,7 @@ for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     un2 = ftcs(*un)
     norme.append(norma(*un2))
     if i in permitted_times.keys():
-        if i == 200 or i == 400: err.append(norma(un2 - analytical(x_val,x0,i)))
+        if i == 200 or i == 400: err.append(norma(un2 - gaussian(x_val,x0)))
         plt.plot(x_val,un2,label='u(x,'+ str(permitted_times[i]) +')')
         plt.legend(loc=0)
     un = un2
@@ -102,4 +102,8 @@ permitted_times = {
 }
 
 plt.plot(list(permitted_times.values()),err,marker='.')
+plt.title('Norma l2 per errore della soluzione con metodo FTCS')
+plt.xlabel('t')
+plt.ylabel('l2-norm err')
+plt.savefig('1_err.png')
 plt.show(block=True)

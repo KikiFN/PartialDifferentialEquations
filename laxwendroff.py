@@ -18,9 +18,6 @@ deltat= (deltax * cf)/a
 def gaussian(a, b):
     return np.exp(-np.power(a-b,2))
 
-def analytical(a,b,t):
-    return np.exp(-np.power(a-t-b,2))
-
 def laxwendroff(*x):
     y = []
     for j in range(0,len(x)):
@@ -60,14 +57,14 @@ for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     un2 = laxwendroff(*un)
     norme.append(norma(*un2))
     if i in permitted_times.keys():
-        err.append(norma(un2 - analytical(x_val,x0,i))) 
+        if i == 200 or i == 400: err.append(norma(un2 - gaussian(x_val,x0))) 
         plt.plot(x_val,un2,label='u(x,'+ str(permitted_times[i]) +')')         
     un = un2
 plt.legend(loc=0)
 plt.xlabel('x')
 plt.ylabel('u')
 plt.title('Metodo Lax-Wendroff')
-fig1.set_size_inches(10,7)
+fig1.set_size_inches(12,7)
 plt.savefig("4_lax-wendroff.png", dpi=100)
 
 fig2=plt.figure(2)
@@ -75,14 +72,17 @@ plt.plot(np.arange(0,20+deltat,deltat),norme)
 plt.title('Norma l2 con metodo Lax-Wendroff')
 plt.xlabel('t')
 plt.ylabel('l2-norm')
-fig2.set_size_inches(10,7)
+fig2.set_size_inches(12,7)
 plt.savefig("4_normewendroff.png", dpi=100)
-'''
-plt.figure(3)
-for t,e in zip((permitted_times.values()),err):
-    plt.plot(t,e,'o-')
-plt.savefig('4_err.png')
-'''
-plt.figure(3)
-plt.plot(err,'o-')
-plt.savefig('4_err.png')
+
+fig3=plt.figure(3)
+permitted_times = {
+    200:10,
+    400:20
+}
+plt.plot(list(permitted_times.values()),err,'o-')
+plt.title('Norma l2 per errore della soluzione con metodo Lax-Wendroff')
+plt.xlabel('t')
+plt.ylabel('l2-norm err')
+fig3.set_size_inches(12,7)
+plt.savefig('4_err.png', dpi=100)

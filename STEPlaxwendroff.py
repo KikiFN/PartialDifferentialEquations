@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from numpy import linalg as LA
 
-#VALORI DI INPUZZ ---------------------------------
+#VALORI DI INPUT---------------------------------
 a=1
 x0=5
 L=10
@@ -41,43 +42,39 @@ def laxwendroff(*x):
     return y
 
 def norma(*y):
-    somma=0
-    for j in range(0,len(y)):
-        mod=0
-        mod = np.power(y[j],2)
-        somma+=mod
-    return np.sqrt(somma/J)
+    return LA.norm(y)/np.sqrt(J)
 #--------------------------------------------------
+x_val= np.arange(0,L,deltax)                  #calcolo vettore x
 
-#calcolo vettore x
-x_val= np.arange(0,L,deltax) 
+fig1=plt.figure(1)
+u = step(*x_val)             #primo u
+plt.plot(x_val,u, label='u(x,0)')
+un = laxwendroff(*u)         #secondo u
 
-plt.figure(1)
-#primo u
-u = step(*x_val)
-plt.plot(x_val,u)
-norme.append(norma(*u))
-#secondo u
-un = laxwendroff(*u)
-plt.plot(x_val,un)
-norme.append(norma(*un))
-
+permitted_times = {
+    100:5,
+    200:10,
+    300:15,
+    400:20
+}
 #tutti gli altri u
-for n in np.arange(0,5,deltat):
+for i,n in enumerate(np.arange(0,20+deltat,deltat)):
     un2 = laxwendroff(*un)
     norme.append(norma(*un2))
-    #print(un2)
-    plt.plot(x_val,un2)
+    if i in permitted_times.keys(): 
+        plt.plot(x_val,un2,label='u(x,'+ str(permitted_times[i]) +')')
     un = un2
-    n+=1
+plt.legend(loc=0)
+plt.xlabel('x')
+plt.ylabel('u')
+plt.title('Metodo Lax-Wendroff')
+fig1.set_size_inches(12,7)
+plt.savefig("STEPlax-wendroff.png", dpi=100)
 
-
-plt.savefig("STEPlax-wendroff.png")
-plt.show(1)
-
-print(len(norme))
-
-plt.figure(2)
-plt.plot(norme)
+fig2=plt.figure(2)
+plt.plot(np.arange(0,20+deltat,deltat),norme)
+plt.title('Norma L2 con metodo Lax-Wendroff')
+plt.xlabel('t')
+plt.ylabel('L2-norm')
+fig2.set_size_inches(12,7)
 plt.savefig("STEPnormewendroff.png")
-plt.show(2)
